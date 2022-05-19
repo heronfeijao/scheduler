@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import axios from "axios";
 
 import "components/Application.scss";
 import DayList from "./DayList.jsx";
@@ -10,25 +12,6 @@ import Empty from "./Appointment/Empty.jsx";
 import Error from "./Appointment/Error.jsx";
 import Form from "./Appointment/Form.jsx";
 import Status from "./Appointment/Status.jsx";
-
-// --------------DAYS---------------
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
 
 // --------------MOCK DATA---------------
 const appointments = {
@@ -71,10 +54,15 @@ const appointments = {
 };
 
 export default function Application(props) {
-  const [day, setDay] = useState("Monday");
+  const [day, setDay] = useState([]);
+  const [days, setDays] = useState([]);
   const appointmentList = Object.values(appointments).map((appointment) => {
     return <Appointment key={appointment.id} {...appointment} />;
   });
+
+  useEffect(() => {
+    axios.get("/api/days").then((res) => setDays(res.data));
+  }, []);
 
   return (
     <main className="layout">
