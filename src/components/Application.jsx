@@ -22,15 +22,10 @@ export default function Application(props) {
     day: "Monday",
     days: [],
     appointments: {},
-    interviewers: {}
+    interviewers: {},
   });
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
-
-  // Object.values(appointments)
-
   const setDay = (day) => setState({ ...state, day });
-  // const setDays = days => setState(prev => ({...prev, days}))
 
   useEffect(() => {
     Promise.all([
@@ -38,17 +33,30 @@ export default function Application(props) {
       axios.get("/api/appointments"),
       axios.get("/api/interviewers"),
     ]).then((all) => {
-      setState((prev) => ({ ...prev, days: all[0].data, appointments: all[1].data }));
-      // setState((prev) => ({ ...prev, days: all[1].data }));
-      // setState((prev) => ({ ...prev, appointments: all[2].data }));
-      console.log('0', all[0].data); // first
-      console.log('1',all[1].data); // second
-      console.log('2',all[2].data); // third
+      setState((prev) => ({
+        ...prev,
+        days: all[0].data,
+        appointments: all[1].data,
+        interviewers: all[2].data,
+      }));
+      console.log("0", all[0].data); // first
+      console.log("1", all[1].data); // second
+      console.log("2", all[2].data); // third
     });
   }, []);
 
-  const appointmentList = dailyAppointments.map((appointment) => {
-    return <Appointment key={appointment.id} {...appointment} />;
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
+
+  const schedule = dailyAppointments.map((appointment) => {
+    const interview = getInterview(state, appointment.interview);
+    return (
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+      />
+    );
   });
 
   return (
@@ -70,7 +78,7 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {appointmentList}
+        {schedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>
