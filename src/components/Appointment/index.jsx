@@ -1,13 +1,14 @@
 import React from "react";
+import "./styles.scss";
 import Empty from "./Empty";
 import Show from "./Show";
 import Header from "./Header";
-import "./styles.scss";
-import useVisualMode from "hooks/useVisualMode.js";
 import Form from "./Form";
+import useVisualMode from "hooks/useVisualMode.js";
+
 
 export default function Appointment(props) {
-  const { time, interview } = props;
+  const { time, interview, interviewers } = props;
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -24,11 +25,11 @@ export default function Appointment(props) {
       {mode === SHOW && (
         <Show
           student={interview.student}
-          interviewer={interview.interviewer.name}
+          interviewer={interview.interviewer}
         />
       )}
 
-      {mode === CREATE && <Form />}
+      {mode === CREATE && <Form interviewers={interviewers} onCancel={back} onSave={() => console.log('onSave')} />}
     </article>
   );
 }
