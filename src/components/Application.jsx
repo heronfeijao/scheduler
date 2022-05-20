@@ -5,19 +5,9 @@ import axios from "axios";
 import "components/Application.scss";
 import DayList from "./DayList.jsx";
 import Appointment from "./Appointment/index.jsx";
-import { getAppointmentsForDay } from "./helpers/selectors.js";
-// import Header from "./Appointment/Header.jsx";
-// import Show from "./Appointment/Show.jsx";
-// import Confirm from "./Appointment/Confirm.jsx";
-// import Empty from "./Appointment/Empty.jsx";
-// import Error from "./Appointment/Error.jsx";
-// import Form from "./Appointment/Form.jsx";
-// import Status from "./Appointment/Status.jsx";
+import { getAppointmentsForDay, getInterview } from "./helpers/selectors.js";
 
 export default function Application(props) {
-  // const [day, setDay] = useState([]);
-  // const [days, setDays] = useState([]);
-
   const [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -32,16 +22,13 @@ export default function Application(props) {
       axios.get("/api/days"),
       axios.get("/api/appointments"),
       axios.get("/api/interviewers"),
-    ]).then((all) => {
+    ]).then((res) => {
       setState((prev) => ({
         ...prev,
-        days: all[0].data,
-        appointments: all[1].data,
-        interviewers: all[2].data,
+        days: res[0].data,
+        appointments: res[1].data,
+        interviewers: res[2].data,
       }));
-      console.log("0", all[0].data); // first
-      console.log("1", all[1].data); // second
-      console.log("2", all[2].data); // third
     });
   }, []);
 
