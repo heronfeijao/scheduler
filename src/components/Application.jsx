@@ -5,7 +5,11 @@ import axios from "axios";
 import "components/Application.scss";
 import DayList from "./DayList.jsx";
 import Appointment from "./Appointment/index.jsx";
-import { getAppointmentsForDay, getInterviewersForDay, getInterview } from "./helpers/selectors.js";
+import {
+  getAppointmentsForDay,
+  getInterviewersForDay,
+  getInterview,
+} from "./helpers/selectors.js";
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -29,14 +33,43 @@ export default function Application(props) {
         appointments: res[1].data,
         interviewers: res[2].data,
       }));
-      console.log(res[0].data);
-      console.log(res[1].data);
-      console.log(res[2].data);
+      // console.log(res[0].data);
+      // console.log(res[1].data);
+      // console.log(res[2].data);
     });
   }, []);
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   const dailyInterviewers = getInterviewersForDay(state, state.day);
+
+  const bookInterview = (id, interview) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview },
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+
+    return axios
+      .put(`/api/appointments/${id}`, appointment)
+      .then(() => setState({ ...state, appointments }))
+      .catch((err) => console.log(err));
+  };
+
+  const cancelInterview = (id) => {
+    const appointments = {
+      ...state.appointments,
+      [id]: null,
+    };
+
+    return axios
+      .delete(`/api/appointments/${id}`, appointments)
+      .then(() => setState({ ...state, ...appointments }))
+      .catch((err) => console.log(err));
+  };
 
   const schedule = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
@@ -47,6 +80,8 @@ export default function Application(props) {
         time={appointment.time}
         interview={interview}
         interviewers={dailyInterviewers}
+        bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
       />
     );
   });
