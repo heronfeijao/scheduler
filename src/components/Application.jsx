@@ -33,9 +33,6 @@ export default function Application(props) {
         appointments: res[1].data,
         interviewers: res[2].data,
       }));
-      // console.log(res[0].data);
-      // console.log(res[1].data);
-      // console.log(res[2].data);
     });
   }, []);
 
@@ -56,19 +53,22 @@ export default function Application(props) {
     return axios
       .put(`/api/appointments/${id}`, appointment)
       .then(() => setState({ ...state, appointments }))
-      .catch((err) => console.log(err));
   };
 
   const cancelInterview = (id) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+
     const appointments = {
       ...state.appointments,
-      [id]: null,
+      [id]: appointment,
     };
 
     return axios
-      .delete(`/api/appointments/${id}`, appointments)
+      .delete(`/api/appointments/${id}`, id)
       .then(() => setState({ ...state, ...appointments }))
-      .catch((err) => console.log(err));
   };
 
   const schedule = dailyAppointments.map((appointment) => {
