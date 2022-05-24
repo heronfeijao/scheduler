@@ -21,8 +21,8 @@ export default function Appointment(props) {
   const EDIT = "EDIT";
   const ERROR_SAVE = "Could not book the appointment.";
   const ERROR_DELETE = "Could not cancel the appointment.";
+  const ERROR_EMPTY = "Please fill out the form."
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
-
   useVisualMode(interview ? <Show /> : <Empty />);
 
   const save = (name, interviewer) => {
@@ -30,6 +30,11 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
+
+    if (!interview.student || !interview.interviewer) {
+      transition(ERROR_EMPTY)
+      return
+    }
 
     transition(SAVING);
 
@@ -57,6 +62,8 @@ export default function Appointment(props) {
   return (
     <article className="appointment">
       <Header time={time} />
+
+      {mode === ERROR_EMPTY && <Error message={ERROR_EMPTY} onClose={back} />}
 
       {mode === ERROR_DELETE && <Error message={ERROR_DELETE} onClose={back} />}
 
