@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { updateSpots } from "../components/helpers/selectors";
+import { updateSpots } from "../components/helpers/updateSpots";
 
 export default function useApplicationData() {
   const [state, setState] = useState({
