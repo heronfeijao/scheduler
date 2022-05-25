@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "components/Button";
 import InterviewerList from "components/InterviewerList";
 
@@ -18,6 +18,10 @@ export default function Form(props) {
     reset();
   };
 
+  useEffect(() => {
+    setError("");
+  }, [interviewer]);
+
   function save(student, interviewer) {
     if (student === "") {
       setError("Student name cannot be blank");
@@ -29,7 +33,7 @@ export default function Form(props) {
       return;
     }
 
-    setError("")
+    setError("");
     onSave(student, interviewer);
   }
 
@@ -44,8 +48,9 @@ export default function Form(props) {
             placeholder="Enter Student Name"
             value={student}
             onChange={(e) => {
-              setError("")
-              setStudent(e.target.value)}}
+              setError("");
+              setStudent(e.target.value);
+            }}
             data-testid="student-name-input"
           />
         </form>

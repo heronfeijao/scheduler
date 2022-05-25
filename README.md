@@ -1,4 +1,17 @@
 # Interview Scheduler
+A web app created as an educational purpose to learn more about basic React functionalities.
+
+The app requires the following database/server repo to run:
+https://github.com/heronfeijao/scheduler-api
+
+## Photos
+
+### Layout
+!["Screenshot of layout"](./docs/Layout.png)
+
+### Interview Form
+!["Screenshot of form"](./docs/Add-Interview.png)
+
 
 ## Setup
 
