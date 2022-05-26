@@ -8,20 +8,24 @@ export default function Form(props) {
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
   const [error, setError] = useState("");
 
+  // * Make the form blank after cancel * \\
   const reset = () => {
     setStudent("");
     setInterviewer(null);
   };
 
+  // * Cancel button * \\
   const cancel = () => {
     onCancel();
     reset();
   };
 
+  // * Remove error message after selecting interviewer * \\
   useEffect(() => {
     setError("");
   }, [interviewer]);
 
+  // * Save form confirmation *
   function save(student, interviewer) {
     if (student === "") {
       setError("Student name cannot be blank");

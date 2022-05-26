@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function useVisualMode(initial) {
   const [mode, setMode] = useState(initial);
   const [history, setHistory] = useState([initial])
 
+  // * Transition the card states  *
   const transition = (newMode, replace = false) => {
-    // const newHistory = [...history];
-    // if (replace) {
-    //   newHistory.pop();
-    // }
-    // setMode(newMode)
-    // setHistory([...newHistory, newMode]);
     setMode(newMode);
     setHistory(prev => [...(replace ? prev.slice(0, -1) : prev), newMode]);
   }
 
+  // * fuction to revert the card previous state *
   const back = () => {
     if (history.length === 1) return;
     const newHistory = [...history];

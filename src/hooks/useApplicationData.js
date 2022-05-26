@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios";
 import { updateSpots } from "../components/helpers/updateSpots";
 
@@ -10,8 +10,10 @@ export default function useApplicationData() {
     interviewers: {},
   });
 
+  // * Set selected day *
   const setDay = (day) => setState({ ...state, day });
 
+  // * Initial data request (get) *
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -27,6 +29,7 @@ export default function useApplicationData() {
     });
   }, []);
 
+  // * PUT request for booking the interview *
   const bookInterview = (id, interview) => {
     const appointment = {
       ...state.appointments[id],
@@ -45,6 +48,7 @@ export default function useApplicationData() {
         setState({ ...state, appointments, days })})
   };
 
+  // * DELETE request for cancelling the interview *
   const cancelInterview = (id) => {
     const appointment = {
       ...state.appointments[id],
@@ -60,7 +64,7 @@ export default function useApplicationData() {
       .delete(`/api/appointments/${id}`, id)
       .then(() => {
         const days = updateSpots(state, appointments);
-        setState({ ...state, ...appointments, days })});
+        setState({ ...state, appointments, days })});
   };
 
   return { state, setDay, bookInterview, cancelInterview }

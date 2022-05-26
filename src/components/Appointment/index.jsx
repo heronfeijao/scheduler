@@ -12,6 +12,8 @@ import Error from "./Error";
 export default function Appointment(props) {
   const { time, interview, interviewers, id, bookInterview, cancelInterview } =
     props;
+
+  // * Card states *
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
@@ -24,6 +26,7 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
   useVisualMode(interview ? <Show /> : <Empty />);
 
+  // * Save interview confirmation *
   const save = (name, interviewer) => {
     const interview = {
       student: name,
